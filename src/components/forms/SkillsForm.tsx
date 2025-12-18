@@ -6,9 +6,9 @@ import type { Skill } from '../../types/resume';
 const SkillsForm = () => {
   const { resumeData, updateResumeData, toggleSectionVisibility } = useResume();
   const [newSkillName, setNewSkillName] = useState('');
-  const [newSkillCategory, setNewSkillCategory] = useState('Technical');
+  const [newSkillCategory, setNewSkillCategory] = useState('Programming Languages');
 
-  const categories = ['Technical', 'AIML Models', 'Version Control', 'Soft Skills', 'Languages', 'Tools', 'Other'];
+  const categories = ['Programming Languages', 'Frameworks & Libraries', 'Tools', 'AIML Models', 'Soft Skills', 'Languages', 'Other'];
   const isVisible = resumeData.sectionVisibility.skills;
 
   const addSkill = () => {

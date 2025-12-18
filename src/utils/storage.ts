@@ -2,20 +2,45 @@ import type { ResumeData } from '../types/resume';
 
 const STORAGE_KEY = 'resume_builder_data';
 
-export const saveResumeData = (data: ResumeData): void => {
+// Check if running in Electron
+const isElectron = () => {
+  return !!(window as any).electronAPI;
+};
+
+export const saveResumeData = async (data: ResumeData): Promise<void> => {
   try {
-    const jsonData = JSON.stringify(data);
-    localStorage.setItem(STORAGE_KEY, jsonData);
+    if (isElectron()) {
+      // Use Electron SQLite database
+      await (window as any).electronAPI.saveResume(data);
+    } else {
+      // Fallback to localStorage for web
+      const jsonData = JSON.stringify(data);
+      localStorage.setItem(STORAGE_KEY, jsonData);
+    }
   } catch (error) {
     console.error('Failed to save resume data:', error);
   }
 };
 
-export const loadResumeData = (): ResumeData | null => {
+export const loadResumeData = async (): Promise<ResumeData | null> => {
   try {
-    const jsonData = localStorage.getItem(STORAGE_KEY);
-    if (!jsonData) return null;
-    const data = JSON.parse(jsonData) as ResumeData;
+    let data: ResumeData | null = null;
+
+    if (isElectron()) {
+      // Use Electron SQLite database
+      const result = await (window as any).electronAPI.loadResume();
+      if (result.success && result.data) {
+        data = result.data;
+      }
+    } else {
+      // Fallback to localStorage for web
+      const jsonData = localStorage.getItem(STORAGE_KEY);
+      if (jsonData) {
+        data = JSON.parse(jsonData) as ResumeData;
+      }
+    }
+
+    if (!data) return null;
 
     // Migrate old data that doesn't have personalDetails
     if (!data.personalDetails) {
@@ -47,14 +72,29 @@ export const loadResumeData = (): ResumeData | null => {
   }
 };
 
-export const clearResumeData = (): void => {
+export const clearResumeData = async (): Promise<void> => {
   try {
-    localStorage.removeItem(STORAGE_KEY);
+    if (isElectron()) {
+      // Use Electron SQLite database
+      await (window as any).electronAPI.clearResume();
+    } else {
+      // Fallback to localStorage for web
+      localStorage.removeItem(STORAGE_KEY);
+    }
   } catch (error) {
     console.error('Failed to clear resume data:', error);
   }
 };
 
-export const hasStoredData = (): boolean => {
-  return localStorage.getItem(STORAGE_KEY) !== null;
+export const hasStoredData = async (): Promise<boolean> => {
+  try {
+    if (isElectron()) {
+      const result = await (window as any).electronAPI.loadResume();
+      return result.success && result.data !== null;
+    } else {
+      return localStorage.getItem(STORAGE_KEY) !== null;
+    }
+  } catch (error) {
+    return false;
+  }
 };

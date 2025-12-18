@@ -42,17 +42,33 @@ const defaultResumeData: ResumeData = {
 const ResumeContext = createContext<ResumeContextType | undefined>(undefined);
 
 export const ResumeProvider = ({ children }: { children: ReactNode }) => {
-  // Initialize state with data from localStorage or default
-  const [resumeData, setResumeData] = useState<ResumeData>(() => {
-    const storedData = loadResumeData();
-    return storedData || defaultResumeData;
-  });
+  const [resumeData, setResumeData] = useState<ResumeData>(defaultResumeData);
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateType>('modern');
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Auto-save to localStorage whenever resumeData changes
+  // Load data from database on mount
   useEffect(() => {
-    saveResumeData(resumeData);
-  }, [resumeData]);
+    const initData = async () => {
+      try {
+        const storedData = await loadResumeData();
+        if (storedData) {
+          setResumeData(storedData);
+        }
+      } catch (error) {
+        console.error('Failed to load initial data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    initData();
+  }, []);
+
+  // Auto-save to database whenever resumeData changes (skip initial load)
+  useEffect(() => {
+    if (!isLoading) {
+      saveResumeData(resumeData);
+    }
+  }, [resumeData, isLoading]);
 
   const updateResumeData = (data: Partial<ResumeData>) => {
     setResumeData((prev) => ({ ...prev, ...data }));
@@ -68,9 +84,9 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
     }));
   };
 
-  const clearAllData = () => {
+  const clearAllData = async () => {
     setResumeData(defaultResumeData);
-    clearResumeData();
+    await clearResumeData();
   };
 
   return (
