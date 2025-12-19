@@ -8,7 +8,7 @@ const SkillsForm = () => {
   const [newSkillName, setNewSkillName] = useState('');
   const [newSkillCategory, setNewSkillCategory] = useState('Programming Languages');
 
-  const categories = ['Programming Languages', 'Frameworks & Libraries', 'Tools', 'AIML Models', 'Soft Skills', 'Languages', 'Other'];
+  const categories = ['Programming Languages', 'Frameworks & Libraries', 'Tools', 'AIML Models', 'Product Skills', 'Agile & Delivery', 'Analytics & Business', 'Soft Skills', 'Languages', 'Other'];
   const isVisible = resumeData.sectionVisibility.skills;
 
   const addSkill = () => {

@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useResume } from '../../context/ResumeContext';
-import { Download } from 'lucide-react';
+import { Download, FileText } from 'lucide-react';
 import ModernTemplate from '../templates/ModernTemplate';
 import ClassicTemplate from '../templates/ClassicTemplate';
 import MinimalTemplate from '../templates/MinimalTemplate';
 import type { TemplateType } from '../../types/resume';
 import { downloadPDF } from '../../utils/pdfExport';
+import { downloadDOCX } from '../../utils/docxExport';
 
 const ResumePreview = () => {
   const { resumeData, selectedTemplate, setSelectedTemplate } = useResume();
@@ -43,18 +44,41 @@ const ResumePreview = () => {
     }
   };
 
+  const handleExportDOCX = async () => {
+    try {
+      setIsExporting(true);
+      const filename = `${resumeData.personalInfo.fullName.replace(/\s+/g, '_') || 'resume'}_resume.docx`;
+      await downloadDOCX(resumeData, filename);
+    } catch (error) {
+      console.error('Error exporting DOCX:', error);
+      alert('Failed to export DOCX. Please try again.');
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-gray-900">Preview</h2>
-        <button
-          onClick={handleExportPDF}
-          disabled={isExporting}
-          className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
-        >
-          <Download size={20} />
-          {isExporting ? 'Exporting...' : 'Export PDF'}
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={handleExportPDF}
+            disabled={isExporting}
+            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+          >
+            <Download size={20} />
+            {isExporting ? 'Exporting...' : 'Export PDF'}
+          </button>
+          <button
+            onClick={handleExportDOCX}
+            disabled={isExporting}
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+          >
+            <FileText size={20} />
+            {isExporting ? 'Exporting...' : 'Export DOCX'}
+          </button>
+        </div>
       </div>
 
       {/* Template Selector */}

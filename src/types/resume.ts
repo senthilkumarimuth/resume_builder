@@ -63,3 +63,17 @@ export interface ResumeData {
 }
 
 export type TemplateType = 'classic' | 'modern' | 'minimal' | 'creative';
+
+export interface Profile {
+  id: number;
+  name: string;
+  data: ResumeData;
+  template: TemplateType;
+  updatedAt: string;
+}
+
+export interface ProfileMetadata {
+  id: number;
+  name: string;
+  updated_at: string;
+}

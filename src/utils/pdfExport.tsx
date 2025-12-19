@@ -14,15 +14,21 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   name: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
-    marginBottom: 5,
-    color: '#111827',
+    marginBottom: 8,
+    color: '#1e40af',
+    letterSpacing: 0.5,
   },
   contactInfo: {
     fontSize: 9,
-    color: '#4b5563',
-    marginTop: 3,
+    color: '#374151',
+    marginTop: 2,
+    lineHeight: 1.4,
+  },
+  contactLabel: {
+    color: '#2563eb',
+    fontWeight: 'bold',
   },
   section: {
     marginBottom: 15,
@@ -87,25 +93,43 @@ const ResumePDF = ({ data }: { data: ResumeData }) => (
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.name}>{data.personalInfo.fullName || 'Your Name'}</Text>
-        <Text style={styles.contactInfo}>
-          {[
-            data.personalInfo.email,
-            data.personalInfo.phone,
-            data.personalInfo.location,
-          ]
-            .filter(Boolean)
-            .join(' • ')}
-        </Text>
+        {/* Primary Contact */}
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 4 }}>
+          {data.personalInfo.email && (
+            <Text style={styles.contactInfo}>
+              {data.personalInfo.email}
+              {(data.personalInfo.phone || data.personalInfo.location) && '  •  '}
+            </Text>
+          )}
+          {data.personalInfo.phone && (
+            <Text style={styles.contactInfo}>
+              {data.personalInfo.phone}
+              {data.personalInfo.location && '  •  '}
+            </Text>
+          )}
+          {data.personalInfo.location && (
+            <Text style={styles.contactInfo}>{data.personalInfo.location}</Text>
+          )}
+        </View>
+        {/* Social Links */}
         {(data.personalInfo.linkedin || data.personalInfo.github || data.personalInfo.website) && (
-          <Text style={styles.contactInfo}>
-            {[
-              data.personalInfo.linkedin && `LinkedIn: ${data.personalInfo.linkedin}`,
-              data.personalInfo.github && `GitHub: ${data.personalInfo.github}`,
-              data.personalInfo.website && `Website: ${data.personalInfo.website}`,
-            ]
-              .filter(Boolean)
-              .join(' • ')}
-          </Text>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 3 }}>
+            {data.personalInfo.linkedin && (
+              <Text style={styles.contactInfo}>
+                {data.personalInfo.linkedin}
+                {(data.personalInfo.github || data.personalInfo.website) && '  •  '}
+              </Text>
+            )}
+            {data.personalInfo.github && (
+              <Text style={styles.contactInfo}>
+                {data.personalInfo.github}
+                {data.personalInfo.website && '  •  '}
+              </Text>
+            )}
+            {data.personalInfo.website && (
+              <Text style={styles.contactInfo}>{data.personalInfo.website}</Text>
+            )}
+          </View>
         )}
       </View>
 
