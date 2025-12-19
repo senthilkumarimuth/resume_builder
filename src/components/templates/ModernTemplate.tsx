@@ -111,7 +111,7 @@ const ModernTemplate = ({ data }: TemplateProps) => {
                   <p className="text-gray-600 text-sm mb-2">{exp.description}</p>
                 )}
                 {exp.projects.filter((p) => p.trim()).length > 0 && (
-                  <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                  <ul className="list-disc list-outside ml-4 text-sm text-gray-600 space-y-1">
                     {exp.projects
                       .filter((p) => p.trim())
                       .map((project, idx) => (

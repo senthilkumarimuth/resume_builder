@@ -60,12 +60,13 @@ const styles = StyleSheet.create({
     color: '#4b5563',
     marginTop: 4,
     lineHeight: 1.4,
+    paddingLeft: 0,
   },
   bullet: {
     fontSize: 10,
     color: '#4b5563',
     marginTop: 3,
-    paddingLeft: 10,
+    paddingLeft: 0,
   },
   skillCategory: {
     fontSize: 10,
