@@ -7,12 +7,13 @@ import MinimalTemplate from '../templates/MinimalTemplate';
 import type { TemplateType } from '../../types/resume';
 import { downloadPDF } from '../../utils/pdfExport';
 import { downloadDOCX } from '../../utils/docxExport';
+import type { ReactElement } from 'react';
 
 const ResumePreview = () => {
   const { resumeData, selectedTemplate, setSelectedTemplate } = useResume();
   const [isExporting, setIsExporting] = useState(false);
 
-  const templates: Record<TemplateType, { name: string; component: JSX.Element }> = {
+  const templates: Record<TemplateType, { name: string; component: ReactElement }> = {
     modern: {
       name: 'Modern',
       component: <ModernTemplate data={resumeData} />,

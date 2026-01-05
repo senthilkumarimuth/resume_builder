@@ -202,8 +202,12 @@ export const generateDOCX = async (data: ResumeData): Promise<Blob> => {
       // Duration
       sections.push(
         new Paragraph({
-          text: `${formatDate(exp.startDate)} - ${exp.current ? 'Present' : formatDate(exp.endDate)}`,
-          italics: true,
+          children: [
+            new TextRun({
+              text: `${formatDate(exp.startDate)} - ${exp.current ? 'Present' : formatDate(exp.endDate)}`,
+              italics: true,
+            }),
+          ],
           spacing: {
             after: 100,
           },
@@ -300,8 +304,12 @@ export const generateDOCX = async (data: ResumeData): Promise<Blob> => {
       }`;
       sections.push(
         new Paragraph({
-          text: eduDetails,
-          italics: true,
+          children: [
+            new TextRun({
+              text: eduDetails,
+              italics: true,
+            }),
+          ],
           spacing: {
             after: 100,
           },
