@@ -156,7 +156,8 @@ export const generateDOCX = async (data: ResumeData): Promise<Blob> => {
   }
 
   // Work Experience
-  if (data.sectionVisibility.workExperience && data.workExperience.length > 0) {
+  const visibleWorkExperience = data.workExperience?.filter((exp) => exp.visible !== false) ?? [];
+  if (data.sectionVisibility.workExperience && visibleWorkExperience.length > 0) {
     sections.push(
       new Paragraph({
         text: 'WORK EXPERIENCE',
@@ -176,7 +177,7 @@ export const generateDOCX = async (data: ResumeData): Promise<Blob> => {
       })
     );
 
-    data.workExperience.forEach((exp, index) => {
+    visibleWorkExperience.forEach((exp, index) => {
       // Job title
       sections.push(
         new Paragraph({
@@ -228,11 +229,11 @@ export const generateDOCX = async (data: ResumeData): Promise<Blob> => {
 
       // Projects/Responsibilities
       exp.projects
-        .filter((p) => p.trim())
+        .filter((p) => p.visible !== false && p.text.trim())
         .forEach((project) => {
           sections.push(
             new Paragraph({
-              text: project,
+              text: project.text,
               bullet: {
                 level: 0,
               },

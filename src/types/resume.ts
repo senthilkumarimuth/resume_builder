@@ -8,6 +8,11 @@ export interface PersonalInfo {
   website?: string;
 }
 
+export interface ProjectItem {
+  text: string;
+  visible?: boolean;
+}
+
 export interface WorkExperience {
   id: string;
   company: string;
@@ -15,8 +20,9 @@ export interface WorkExperience {
   startDate: string;
   endDate: string;
   current: boolean;
-  projects: string[];
+  projects: ProjectItem[];
   description?: string;
+  visible?: boolean;
 }
 
 export interface Education {

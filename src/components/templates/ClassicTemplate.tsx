@@ -70,39 +70,43 @@ const ClassicTemplate = ({ data }: TemplateProps) => {
       )}
 
       {/* Work Experience */}
-      {data.sectionVisibility.workExperience && data.workExperience.length > 0 && (
-        <div className="mb-5">
-          <h2 className="text-lg font-bold text-gray-900 uppercase border-b border-gray-400 mb-2">
-            Work Experience
-          </h2>
-          <div className="space-y-3">
-            {data.workExperience.map((exp) => (
-              <div key={exp.id}>
-                <div className="flex justify-between items-baseline mb-1">
-                  <h3 className="font-bold text-gray-900">{exp.role}</h3>
-                  <span className="text-sm text-gray-600">
-                    {formatDate(exp.startDate)} -{' '}
-                    {exp.current ? 'Present' : formatDate(exp.endDate)}
-                  </span>
-                </div>
-                <p className="text-gray-700 italic mb-1">{exp.company}</p>
-                {exp.description && (
-                  <p className="text-gray-600 text-sm mb-2">{exp.description}</p>
-                )}
-                {exp.projects.filter((p) => p.trim()).length > 0 && (
-                  <ul className="list-disc list-outside ml-4 text-sm text-gray-600 space-y-1">
-                    {exp.projects
-                      .filter((p) => p.trim())
-                      .map((project, idx) => (
-                        <li key={idx}>{project}</li>
-                      ))}
-                  </ul>
-                )}
-              </div>
-            ))}
+      {data.sectionVisibility.workExperience &&
+        data.workExperience.filter((exp) => exp.visible !== false).length > 0 && (
+          <div className="mb-5">
+            <h2 className="text-lg font-bold text-gray-900 uppercase border-b border-gray-400 mb-2">
+              Work Experience
+            </h2>
+            <div className="space-y-3">
+              {data.workExperience
+                .filter((exp) => exp.visible !== false)
+                .map((exp) => (
+                  <div key={exp.id}>
+                    <div className="flex justify-between items-baseline mb-1">
+                      <h3 className="font-bold text-gray-900">{exp.role}</h3>
+                      <span className="text-sm text-gray-600">
+                        {formatDate(exp.startDate)} -{' '}
+                        {exp.current ? 'Present' : formatDate(exp.endDate)}
+                      </span>
+                    </div>
+                    <p className="text-gray-700 italic mb-1">{exp.company}</p>
+                    {exp.description && (
+                      <p className="text-gray-600 text-sm mb-2">{exp.description}</p>
+                    )}
+                    {exp.projects.filter((p) => p.visible !== false && p.text.trim()).length >
+                      0 && (
+                      <ul className="list-disc list-outside ml-4 text-sm text-gray-600 space-y-1">
+                        {exp.projects
+                          .filter((p) => p.visible !== false && p.text.trim())
+                          .map((project, idx) => (
+                            <li key={idx}>{project.text}</li>
+                          ))}
+                      </ul>
+                    )}
+                  </div>
+                ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
       {/* Education */}
       {data.sectionVisibility.education && data.education.length > 0 && (

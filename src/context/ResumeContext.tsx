@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import type { ReactNode } from 'react';
 import type { ResumeData, TemplateType, SectionVisibility, ProfileMetadata } from '../types/resume';
-import { clearResumeData, getAllProfiles, getProfile, saveProfile, createProfile as createProfileStorage, deleteProfile as deleteProfileStorage, duplicateProfile as duplicateProfileStorage } from '../utils/storage';
+import { clearResumeData, getAllProfiles, getProfile, saveProfile, createProfile as createProfileStorage, deleteProfile as deleteProfileStorage, duplicateProfile as duplicateProfileStorage, migrateResumeData } from '../utils/storage';
 
 interface ResumeContextType {
   resumeData: ResumeData;
@@ -76,7 +76,7 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
           if (profileData) {
             setCurrentProfileId(profileData.id);
             setCurrentProfileName(profileData.name);
-            setResumeData(profileData.data);
+            setResumeData(migrateResumeData(profileData.data));
             setSelectedTemplate(profileData.template);
           }
         }
@@ -117,7 +117,7 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
       if (profileData) {
         setCurrentProfileId(profileData.id);
         setCurrentProfileName(profileData.name);
-        setResumeData(profileData.data);
+        setResumeData(migrateResumeData(profileData.data));
         setSelectedTemplate(profileData.template);
       }
     } catch (error) {

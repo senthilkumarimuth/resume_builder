@@ -16,8 +16,9 @@ const WorkExperienceForm = () => {
       startDate: '',
       endDate: '',
       current: false,
-      projects: [''],
+      projects: [{ text: '', visible: true }],
       description: '',
+      visible: true,
     };
     updateResumeData({
       workExperience: [...resumeData.workExperience, newExp],
@@ -42,7 +43,7 @@ const WorkExperienceForm = () => {
   const addProject = (expId: string) => {
     updateResumeData({
       workExperience: resumeData.workExperience.map((exp) =>
-        exp.id === expId ? { ...exp, projects: [...exp.projects, ''] } : exp
+        exp.id === expId ? { ...exp, projects: [...exp.projects, { text: '', visible: true }] } : exp
       ),
     });
   };
@@ -64,7 +65,30 @@ const WorkExperienceForm = () => {
           ? {
               ...exp,
               projects: exp.projects.map((proj, idx) =>
-                idx === projectIndex ? value : proj
+                idx === projectIndex ? { ...proj, text: value } : proj
+              ),
+            }
+          : exp
+      ),
+    });
+  };
+
+  const toggleExperienceVisibility = (id: string) => {
+    updateResumeData({
+      workExperience: resumeData.workExperience.map((exp) =>
+        exp.id === id ? { ...exp, visible: exp.visible === false } : exp
+      ),
+    });
+  };
+
+  const toggleProjectVisibility = (expId: string, projectIndex: number) => {
+    updateResumeData({
+      workExperience: resumeData.workExperience.map((exp) =>
+        exp.id === expId
+          ? {
+              ...exp,
+              projects: exp.projects.map((proj, idx) =>
+                idx === projectIndex ? { ...proj, visible: proj.visible === false } : proj
               ),
             }
           : exp
@@ -126,6 +150,20 @@ const WorkExperienceForm = () => {
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleExperienceVisibility(exp.id);
+                    }}
+                    className={`p-2 rounded-lg transition-colors ${
+                      exp.visible !== false
+                        ? 'text-green-600 hover:bg-green-50'
+                        : 'text-gray-400 hover:bg-gray-100'
+                    }`}
+                    title={exp.visible !== false ? 'Hide from resume' : 'Show in resume'}
+                  >
+                    {exp.visible !== false ? <Eye size={20} /> : <EyeOff size={20} />}
+                  </button>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -237,20 +275,31 @@ const WorkExperienceForm = () => {
 
                     <div className="space-y-2">
                       {exp.projects.map((project, projIndex) => (
-                        <div key={projIndex} className="flex gap-2">
+                        <div key={projIndex} className="flex gap-2 items-center">
                           <input
                             type="text"
-                            value={project}
+                            value={project.text}
                             onChange={(e) => updateProject(exp.id, projIndex, e.target.value)}
                             className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             placeholder="Describe a key project or achievement..."
                           />
+                          <button
+                            onClick={() => toggleProjectVisibility(exp.id, projIndex)}
+                            className={`p-2 rounded-lg transition-colors shrink-0 ${
+                              project.visible !== false
+                                ? 'text-green-600 hover:bg-green-50'
+                                : 'text-gray-400 hover:bg-gray-100'
+                            }`}
+                            title={project.visible !== false ? 'Hide from resume' : 'Show in resume'}
+                          >
+                            {project.visible !== false ? <Eye size={18} /> : <EyeOff size={18} />}
+                          </button>
                           {exp.projects.length > 1 && (
                             <button
                               onClick={() => removeProject(exp.id, projIndex)}
-                              className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                              className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors shrink-0"
                             >
-                              <Trash2 size={20} />
+                              <Trash2 size={18} />
                             </button>
                           )}
                         </div>

@@ -73,41 +73,48 @@ const MinimalTemplate = ({ data }: TemplateProps) => {
       )}
 
       {/* Work Experience */}
-      {data.sectionVisibility.workExperience && data.workExperience.length > 0 && (
-        <div className="mb-8">
-          <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">
-            Experience
-          </h2>
-          <div className="space-y-5">
-            {data.workExperience.map((exp) => (
-              <div key={exp.id}>
-                <div className="mb-1">
-                  <h3 className="font-semibold text-gray-900 inline">{exp.role}</h3>
-                  <span className="text-gray-600"> — {exp.company}</span>
-                </div>
-                <p className="text-sm text-gray-500 mb-2">
-                  {formatDate(exp.startDate)} -{' '}
-                  {exp.current ? 'Present' : formatDate(exp.endDate)}
-                </p>
-                {exp.description && (
-                  <p className="text-gray-600 text-sm mb-2">{exp.description}</p>
-                )}
-                {exp.projects.filter((p) => p.trim()).length > 0 && (
-                  <ul className="space-y-1">
-                    {exp.projects
-                      .filter((p) => p.trim())
-                      .map((project, idx) => (
-                        <li key={idx} className="text-sm text-gray-600 pl-4 relative before:content-['—'] before:absolute before:left-0">
-                          {project}
-                        </li>
-                      ))}
-                  </ul>
-                )}
-              </div>
-            ))}
+      {data.sectionVisibility.workExperience &&
+        data.workExperience.filter((exp) => exp.visible !== false).length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">
+              Experience
+            </h2>
+            <div className="space-y-5">
+              {data.workExperience
+                .filter((exp) => exp.visible !== false)
+                .map((exp) => (
+                  <div key={exp.id}>
+                    <div className="mb-1">
+                      <h3 className="font-semibold text-gray-900 inline">{exp.role}</h3>
+                      <span className="text-gray-600"> — {exp.company}</span>
+                    </div>
+                    <p className="text-sm text-gray-500 mb-2">
+                      {formatDate(exp.startDate)} -{' '}
+                      {exp.current ? 'Present' : formatDate(exp.endDate)}
+                    </p>
+                    {exp.description && (
+                      <p className="text-gray-600 text-sm mb-2">{exp.description}</p>
+                    )}
+                    {exp.projects.filter((p) => p.visible !== false && p.text.trim()).length >
+                      0 && (
+                      <ul className="space-y-1">
+                        {exp.projects
+                          .filter((p) => p.visible !== false && p.text.trim())
+                          .map((project, idx) => (
+                            <li
+                              key={idx}
+                              className="text-sm text-gray-600 pl-4 relative before:content-['—'] before:absolute before:left-0"
+                            >
+                              {project.text}
+                            </li>
+                          ))}
+                      </ul>
+                    )}
+                  </div>
+                ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
       {/* Education */}
       {data.sectionVisibility.education && data.education.length > 0 && (

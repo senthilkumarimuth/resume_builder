@@ -1,4 +1,4 @@
-import type { ResumeData, ProfileMetadata, Profile, TemplateType } from '../types/resume';
+import type { ResumeData, ProfileMetadata, Profile, TemplateType, WorkExperience, ProjectItem } from '../types/resume';
 
 const STORAGE_KEY = 'resume_builder_data';
 const PROFILES_LIST_KEY = 'resume_builder_profiles_list';
@@ -8,6 +8,23 @@ const PROFILE_KEY_PREFIX = 'resume_builder_profile_';
 const isElectron = () => {
   return !!(window as any).electronAPI;
 };
+
+function normalizeProject(item: string | ProjectItem): ProjectItem {
+  if (typeof item === 'string') {
+    return { text: item, visible: true };
+  }
+  return { text: item.text, visible: item.visible !== false };
+}
+
+export function migrateResumeData(data: ResumeData): ResumeData {
+  if (!data.workExperience?.length) return data;
+  const workExperience: WorkExperience[] = data.workExperience.map((exp) => {
+    const visible = exp.visible !== false;
+    const projects: ProjectItem[] = (exp.projects || []).map(normalizeProject);
+    return { ...exp, visible, projects };
+  });
+  return { ...data, workExperience };
+}
 
 export const saveResumeData = async (data: ResumeData): Promise<void> => {
   try {
@@ -67,7 +84,7 @@ export const loadResumeData = async (): Promise<ResumeData | null> => {
       };
     }
 
-    return data;
+    return migrateResumeData(data);
   } catch (error) {
     console.error('Failed to load resume data:', error);
     return null;

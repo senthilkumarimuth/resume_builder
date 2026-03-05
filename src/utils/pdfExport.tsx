@@ -164,31 +164,35 @@ const ResumePDF = ({ data }: { data: ResumeData }) => (
       )}
 
       {/* Work Experience */}
-      {data.sectionVisibility.workExperience && data.workExperience.length > 0 && (
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Work Experience</Text>
-          {data.workExperience.map((exp, index) => (
-            <View key={exp.id} style={{ marginTop: index > 0 ? 10 : 0 }}>
-              <Text style={styles.jobTitle}>{exp.role}</Text>
-              <Text style={styles.company}>{exp.company}</Text>
-              <Text style={styles.date}>
-                {formatDate(exp.startDate)} - {exp.current ? 'Present' : formatDate(exp.endDate)}
-              </Text>
-              {exp.description && (
-                <Text style={styles.description}>{exp.description}</Text>
-              )}
-              {exp.projects.filter((p) => p.trim()).length > 0 &&
-                exp.projects
-                  .filter((p) => p.trim())
-                  .map((project, idx) => (
-                    <Text key={idx} style={styles.bullet}>
-                      • {project}
-                    </Text>
-                  ))}
-            </View>
-          ))}
-        </View>
-      )}
+      {data.sectionVisibility.workExperience &&
+        data.workExperience.filter((exp) => exp.visible !== false).length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Work Experience</Text>
+            {data.workExperience
+              .filter((exp) => exp.visible !== false)
+              .map((exp, index) => (
+                <View key={exp.id} style={{ marginTop: index > 0 ? 10 : 0 }}>
+                  <Text style={styles.jobTitle}>{exp.role}</Text>
+                  <Text style={styles.company}>{exp.company}</Text>
+                  <Text style={styles.date}>
+                    {formatDate(exp.startDate)} -{' '}
+                    {exp.current ? 'Present' : formatDate(exp.endDate)}
+                  </Text>
+                  {exp.description && (
+                    <Text style={styles.description}>{exp.description}</Text>
+                  )}
+                  {exp.projects.filter((p) => p.visible !== false && p.text.trim()).length > 0 &&
+                    exp.projects
+                      .filter((p) => p.visible !== false && p.text.trim())
+                      .map((project, idx) => (
+                        <Text key={idx} style={styles.bullet}>
+                          • {project.text}
+                        </Text>
+                      ))}
+                </View>
+              ))}
+          </View>
+        )}
 
       {/* Education */}
       {data.sectionVisibility.education && data.education.length > 0 && (
