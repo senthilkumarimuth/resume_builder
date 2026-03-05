@@ -137,6 +137,40 @@ const ClassicTemplate = ({ data }: TemplateProps) => {
         </div>
       )}
 
+      {/* Certifications */}
+      {data.sectionVisibility.certifications && data.certifications.length > 0 && (
+        <div className="mb-5">
+          <h2 className="text-lg font-bold text-gray-900 uppercase border-b border-gray-400 mb-2">
+            Certifications
+          </h2>
+          <div className="space-y-3">
+            {data.certifications.map((cert) => (
+              <div key={cert.id}>
+                <div className="flex justify-between items-baseline">
+                  <div>
+                    <h3 className="font-bold text-gray-900">{cert.name}</h3>
+                    <p className="text-gray-700 italic">{cert.issuer}</p>
+                    {cert.url && (
+                      <a
+                        href={cert.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-blue-600 hover:underline"
+                      >
+                        View credential
+                      </a>
+                    )}
+                  </div>
+                  {cert.date && (
+                    <span className="text-sm text-gray-600">{formatDate(cert.date)}</span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Personal Details */}
       {data.sectionVisibility.personalDetails &&
         (data.personalDetails.fatherName ||

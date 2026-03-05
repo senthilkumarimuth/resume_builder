@@ -35,6 +35,14 @@ export interface Education {
   gpa?: string;
 }
 
+export interface Certification {
+  id: string;
+  name: string;
+  issuer: string;
+  date: string;
+  url?: string;
+}
+
 export interface Skill {
   id: string;
   name: string;
@@ -55,6 +63,7 @@ export interface SectionVisibility {
   skills: boolean;
   workExperience: boolean;
   education: boolean;
+  certifications: boolean;
   personalDetails: boolean;
 }
 
@@ -63,6 +72,7 @@ export interface ResumeData {
   summary: string;
   workExperience: WorkExperience[];
   education: Education[];
+  certifications: Certification[];
   skills: Skill[];
   personalDetails: PersonalDetails;
   sectionVisibility: SectionVisibility;

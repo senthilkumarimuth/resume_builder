@@ -213,6 +213,23 @@ const ResumePDF = ({ data }: { data: ResumeData }) => (
         </View>
       )}
 
+      {/* Certifications */}
+      {data.sectionVisibility.certifications && data.certifications.length > 0 && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Certifications</Text>
+          {data.certifications.map((cert, index) => (
+            <View key={cert.id} style={{ marginTop: index > 0 ? 10 : 0 }}>
+              <Text style={styles.jobTitle}>{cert.name}</Text>
+              <Text style={styles.company}>{cert.issuer}</Text>
+              <Text style={styles.date}>
+                {cert.date ? formatDate(cert.date) : ''}
+                {cert.url ? ` | ${cert.url}` : ''}
+              </Text>
+            </View>
+          ))}
+        </View>
+      )}
+
       {/* Personal Details */}
       {data.sectionVisibility.personalDetails &&
         (data.personalDetails.fatherName ||

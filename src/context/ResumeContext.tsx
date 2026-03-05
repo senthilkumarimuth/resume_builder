@@ -31,6 +31,7 @@ const defaultResumeData: ResumeData = {
   summary: '',
   workExperience: [],
   education: [],
+  certifications: [],
   skills: [],
   personalDetails: {
     fatherName: '',
@@ -45,6 +46,7 @@ const defaultResumeData: ResumeData = {
     skills: true,
     workExperience: true,
     education: true,
+    certifications: true,
     personalDetails: true,
   },
 };

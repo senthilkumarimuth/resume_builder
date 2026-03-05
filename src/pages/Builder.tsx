@@ -2,6 +2,7 @@ import PersonalInfoForm from '../components/forms/PersonalInfoForm';
 import SummaryForm from '../components/forms/SummaryForm';
 import WorkExperienceForm from '../components/forms/WorkExperienceForm';
 import EducationForm from '../components/forms/EducationForm';
+import CertificationsForm from '../components/forms/CertificationsForm';
 import SkillsForm from '../components/forms/SkillsForm';
 import PersonalDetailsForm from '../components/forms/PersonalDetailsForm';
 import ResumePreview from '../components/preview/ResumePreview';
@@ -31,6 +32,10 @@ const Builder = () => {
 
             <div className="bg-white rounded-lg shadow-md p-6">
               <EducationForm />
+            </div>
+
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <CertificationsForm />
             </div>
 
             <div className="bg-white rounded-lg shadow-md p-6">

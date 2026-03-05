@@ -17,13 +17,20 @@ function normalizeProject(item: string | ProjectItem): ProjectItem {
 }
 
 export function migrateResumeData(data: ResumeData): ResumeData {
-  if (!data.workExperience?.length) return data;
+  const certifications = data.certifications ?? [];
+  const sectionVisibility = {
+    ...data.sectionVisibility,
+    certifications: data.sectionVisibility?.certifications ?? true,
+  };
+  if (!data.workExperience?.length) {
+    return { ...data, certifications, sectionVisibility };
+  }
   const workExperience: WorkExperience[] = data.workExperience.map((exp) => {
     const visible = exp.visible !== false;
     const projects: ProjectItem[] = (exp.projects || []).map(normalizeProject);
     return { ...exp, visible, projects };
   });
-  return { ...data, workExperience };
+  return { ...data, workExperience, certifications, sectionVisibility };
 }
 
 export const saveResumeData = async (data: ResumeData): Promise<void> => {
@@ -80,8 +87,13 @@ export const loadResumeData = async (): Promise<ResumeData | null> => {
         skills: true,
         workExperience: true,
         education: true,
+        certifications: true,
         personalDetails: true,
       };
+    }
+
+    if (!data.certifications) {
+      data.certifications = [];
     }
 
     return migrateResumeData(data);

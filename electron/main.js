@@ -58,6 +58,7 @@ function migrateToProfiles() {
           summary: '',
           workExperience: [],
           education: [],
+          certifications: [],
           skills: [],
           personalDetails: {
             fatherName: '',
@@ -72,6 +73,7 @@ function migrateToProfiles() {
             skills: true,
             workExperience: true,
             education: true,
+            certifications: true,
             personalDetails: true,
           },
         });

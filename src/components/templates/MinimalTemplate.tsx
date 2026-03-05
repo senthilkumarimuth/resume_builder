@@ -141,6 +141,41 @@ const MinimalTemplate = ({ data }: TemplateProps) => {
         </div>
       )}
 
+      {/* Certifications */}
+      {data.sectionVisibility.certifications && data.certifications.length > 0 && (
+        <div className="mb-8">
+          <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">
+            Certifications
+          </h2>
+          <div className="space-y-4">
+            {data.certifications.map((cert) => (
+              <div key={cert.id}>
+                <div className="mb-1">
+                  <h3 className="font-semibold text-gray-900 inline">{cert.name}</h3>
+                </div>
+                <p className="text-gray-600">{cert.issuer}</p>
+                <p className="text-sm text-gray-500">
+                  {cert.date ? formatDate(cert.date) : ''}
+                  {cert.url && (
+                    <>
+                      {' • '}
+                      <a
+                        href={cert.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:underline"
+                      >
+                        View credential
+                      </a>
+                    </>
+                  )}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Personal Details */}
       {data.sectionVisibility.personalDetails &&
         (data.personalDetails.fatherName ||

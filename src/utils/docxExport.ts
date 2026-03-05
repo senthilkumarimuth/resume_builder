@@ -328,6 +328,81 @@ export const generateDOCX = async (data: ResumeData): Promise<Blob> => {
     );
   }
 
+  // Certifications
+  if (data.sectionVisibility.certifications && data.certifications.length > 0) {
+    sections.push(
+      new Paragraph({
+        text: 'CERTIFICATIONS',
+        heading: HeadingLevel.HEADING_2,
+        spacing: {
+          before: 200,
+          after: 100,
+        },
+        border: {
+          bottom: {
+            color: '2563eb',
+            space: 1,
+            style: BorderStyle.SINGLE,
+            size: 6,
+          },
+        },
+      })
+    );
+
+    data.certifications.forEach((cert, index) => {
+      sections.push(
+        new Paragraph({
+          text: cert.name,
+          heading: HeadingLevel.HEADING_3,
+          spacing: {
+            before: index > 0 ? 200 : 0,
+            after: 50,
+          },
+        })
+      );
+
+      sections.push(
+        new Paragraph({
+          text: cert.issuer,
+          spacing: {
+            after: 50,
+          },
+        })
+      );
+
+      const certDetails = cert.date ? formatDate(cert.date) : '';
+      const certDetailsWithUrl = cert.url
+        ? certDetails
+          ? `${certDetails} | ${cert.url}`
+          : cert.url
+        : certDetails;
+      if (certDetailsWithUrl) {
+        sections.push(
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: certDetailsWithUrl,
+                italics: true,
+              }),
+            ],
+            spacing: {
+              after: 100,
+            },
+          })
+        );
+      }
+    });
+
+    sections.push(
+      new Paragraph({
+        text: '',
+        spacing: {
+          after: 100,
+        },
+      })
+    );
+  }
+
   // Personal Details
   if (
     data.sectionVisibility.personalDetails &&
